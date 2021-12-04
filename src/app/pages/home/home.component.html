@@ -1,0 +1,131 @@
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createEmployee"
+    data-bs-whatever="cr">Create Employee</button>
+
+<table class="table">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <!-- <th scope="col">Birth Date</th> -->
+            <th scope="col">Age</th>
+            <th scope="col">pvd_employee</th>
+            <th scope="col">bond pvd_employee</th>
+            <th scope="col">pvd_employer</th>
+            <th scope="col">bond _employer</th>
+            <th scope="col">Start Date</th>
+            <th scope="col">Employee Type</th>
+            <th scope="col">Salary</th>
+            <th scope="col">Pvfrate</th>
+            <th scope="col">Year of Work</th>
+            <th scope="col">Leave</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let item of employeeList">
+            <th scope="row">{{item.employeeid}}</th>
+            <td>{{item.firstname}} {{item.lastname}}</td>
+            <!-- <td>{{item.birthdate}}</td> -->
+            <td>{{item.age}} Years</td> 
+            <td>{{ item.employeetype == 'Permanent' ? (item.pvd_employee.sum_pvd_month |currency:'THB':'THB ':'0.2-2'): '-'}}</td>
+            <td>{{ item.employeetype == 'Permanent' ? (item.pvd_employee.bond |currency:'THB':'THB ':'0.2-2'): '-'}}</td>
+            <td>{{ item.employeetype == 'Permanent' ? (item.pvd_employer.sum_pvd_month |currency:'THB':'THB ':'0.2-2'): '-' }}</td>
+            <td>{{ item.employeetype == 'Permanent' ? (item.pvd_employer.bond |currency:'THB':'THB ':'0.2-2' ): '-'}}</td>
+            <td>{{item.startdate}}</td>
+            <td>{{item.employeetype}}</td>
+            <td>{{item.salary | currency:'THB':'THB ':'0.2-2' }} </td>
+            <td>{{item.employeetype == 'Permanent' ? item.pvfrate: '-'}} </td>
+            <td>{{item.year_of_work |currency:'THB':'':'0.2-2' }} </td>
+            <td>{{item.leave |currency:'THB':'THB ':'0.2-2'}} </td>
+        </tr>
+    </tbody>
+</table>
+
+
+<div class="modal fade" id="createEmployee" tabindex="-1" aria-labelledby="createEmployeeLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createEmployeeLabel">Employee Detail</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                    <div class="row col-12 m-0">
+                        <div class="col-6 mb-1">
+                            <label for="firstname-name" class="col-form-label">First Name:</label>
+                            <input type="text" class="form-control" [(ngModel)]="employee.firstname" id="firstname-name">
+                        </div>
+                        <div class="col-6 mb-1">
+                            <label for="lastname-name" class="col-form-label">Last Name:</label>
+                            <input type="text" class="form-control" [(ngModel)]="employee.lastname" id="lastname-name">
+                        </div>
+                    </div>
+                    <div class="row col-12 m-0">
+                        <div class="col-6 mb-1">
+                            <label for="birthdate-name" class="col-form-label">Birth Date:</label>
+                            <div class="col-xs-12 col-12 col-md-12 form-group mb-3">
+                                <div class="input-group">
+                                    <!-- <input class="form-control" placeholder="yyyy-mm-dd" name="dp" formControlName="dp" ngbDatepicker> -->
+                                    <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="birthdate" ngbDatepicker #bd="ngbDatepicker">
+                                    <div class="input-group-append">
+                                      <button class="btn btn-outline-secondary calendar" (click)="bd.toggle()" type="button"></button>
+                                    </div>
+                                  </div>
+                              </div>
+                        </div>
+                        <div class="col-6 mb-1">
+                            <label for="startdate-name" class="col-form-label">Start Date:</label>
+                            <div class="col-xs-12 col-12 col-md-12 form-group mb-3">
+                            <div class="input-group">
+                                <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="startdate" ngbDatepicker #st="ngbDatepicker">
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary calendar" (click)="st.toggle()" type="button"></button>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row col-12 m-0">
+                        <div class="col-6 mb-1">
+                            <label for="pvfrate-text" class="col-form-label">Pvf Rate:</label>
+                            <select class="form-select" [(ngModel)]="employee.pvfrate"  aria-label="Default select example">
+                                <option value="2" selected>2%</option>
+                                <option value="3">3%</option>
+                                <option value="4">4%</option>
+                                <option value="5">5%</option>
+                                <option value="6">6%</option>
+                                <option value="7">7%</option>
+                                <option value="8">8%</option>
+                                <option value="9">9%</option>
+                                <option value="10">10%</option>
+                            </select> 
+                        </div>
+                        <div class="col-6 mb-1">
+                            <label for="salary-name" class="col-form-label">Salary:</label>
+                            <div class="input-group mb-1">
+                                <span class="input-group-text">$</span>
+                                <input type="text" class="form-control"  [(ngModel)]="employee.salary" aria-label="Amount (to the nearest dollar)">
+                                <span class="input-group-text">.00</span>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="row col-12 m-0">
+                        <div class="col-12 mb-1">
+                            <label for="employeetype-name" class="col-form-label">Employee Type:</label>
+                            <select class="form-select" [(ngModel)]="employee.employeetype" aria-label="Default select example">
+                                <option value="Permanent" selected>Permanent</option>
+                                <option value="Part-Time">Part-Time</option>
+                            </select>   
+                        </div>
+                        
+                    </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" #closemodal data-bs-dismiss="modal" (click)="clearValue()">Close</button>
+                <button type="button" class="btn btn-primary"  (click)="createEmployee()">Add </button>
+            </div>
+        </div>
+    </div>
+</div>
